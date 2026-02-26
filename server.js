@@ -9,6 +9,7 @@ const stockRoutes = require("./routes/stockRoutes");
 
 const app = express();
 
+// Configure CORS
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map((origin) => origin.trim())
   : true;
@@ -21,10 +22,17 @@ app.use(
 );
 app.use(express.json());
 
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/stocks", stockRoutes);
 
+// ✅ Root route for sanity check
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
+
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
